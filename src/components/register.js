@@ -1,84 +1,240 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
-import { userActions } from '../redux/_actions/user.actions';
+import { userActions } from "../redux/_actions/user.actions";
+
+import "../../src/assets/css/login.css";
 
 function RegisterPage() {
-    const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
-        username: '',
-        password: ''
-    });
-    const [submitted, setSubmitted] = useState(false);
-    const registering = useSelector(state => state.registration.registering);
-    const quizCategory = useSelector(state => state.quizCategory);
-    
-    const dispatch = useDispatch();
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const registering = useSelector((state) => state.registration.registering);
+  const dispatch = useDispatch();
 
-    // reset login status
-    useEffect(() => {
-        dispatch(userActions.logout());
-       /// alert(quizCategory.toString());
-    });
+  // reset login status
+  useEffect(() => {
+    dispatch(userActions.logout());
+  });
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setUser(user => ({ ...user, [name]: value }));
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setUser((user) => ({ ...user, [name]: value }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setSubmitted(true);
+    if (user.firstName && user.lastName && user.username && user.password) {
+      dispatch(userActions.register(user));
     }
+  }
 
-    function handleSubmit(e) {
-        e.preventDefault();
+  return (
+    <>
+      <section className="login-bg">
+        <div className="login-popup">
+          <div className="login-container">
+            <div className="popup-header">Register</div>
+            <div className="popup-body mx-auto">
+              <form name="form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={user.firstName}
+                    onChange={handleChange}
+                    className={
+                      "form-control" +
+                      (submitted && !user.firstName ? " is-invalid" : "")
+                    }
+                  />
+                  {submitted && !user.firstName && (
+                    <div className="invalid-feedback">
+                      First Name is required
+                    </div>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={user.lastName}
+                    onChange={handleChange}
+                    className={
+                      "form-control" +
+                      (submitted && !user.lastName ? " is-invalid" : "")
+                    }
+                  />
+                  {submitted && !user.lastName && (
+                    <div className="invalid-feedback">
+                      Last Name is required
+                    </div>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={user.username}
+                    onChange={handleChange}
+                    className={
+                      "form-control" +
+                      (submitted && !user.username ? " is-invalid" : "")
+                    }
+                  />
+                  {submitted && !user.username && (
+                    <div className="invalid-feedback">Username is required</div>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={user.password}
+                    onChange={handleChange}
+                    className={
+                      "form-control" +
+                      (submitted && !user.password ? " is-invalid" : "")
+                    }
+                  />
+                  {submitted && !user.password && (
+                    <div className="invalid-feedback">Password is required</div>
+                  )}
+                </div>
 
-        setSubmitted(true);
-        if (user.firstName && user.lastName && user.username && user.password) {
-            dispatch(userActions.register(user));
-        }
-    }
+                <div className="row">
+                  <div className="col-sm-12 col-md-12 col-lg-12">
+                    <div className="mx-auto cel-pt-20 form-group row-center">
+                      <div className="form-group">
+                        <Link to="/" className="btn btn-link">
+                          <button className="btn btn-outline-primary">
+                            Cancel
+                          </button>
+                        </Link>
+                        <button className="btn btn-primary">
+                          {registering && (
+                            <span className="spinner-border spinner-border-sm mr-1"></span>
+                          )}
+                          Register
+                        </button>
+                      </div>
+                      {/* <Stack spacing={2} direction="row">
+                        <Link to="/">
+                          <Button variant="outlined">Cancel</Button>
+                        </Link>
 
-    return (
-        <div className="col-lg-8 offset-lg-2">
-            <h2>Register</h2>
-            <form name="form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>First Name</label>
-                    <input type="text" name="firstName" value={user.firstName} onChange={handleChange} className={'form-control' + (submitted && !user.firstName ? ' is-invalid' : '')} />
-                    {submitted && !user.firstName &&
-                        <div className="invalid-feedback">First Name is required</div>
-                    }
+                        <Button variant="contained" type="submit">
+                          {registering && (
+                            <span className="spinner-border spinner-border-sm mr-1"></span>
+                          )}
+                          Register
+                        </Button>
+                      </Stack> */}
+                    </div>
+                  </div>
                 </div>
-                <div className="form-group">
-                    <label>Last Name</label>
-                    <input type="text" name="lastName" value={user.lastName} onChange={handleChange} className={'form-control' + (submitted && !user.lastName ? ' is-invalid' : '')} />
-                    {submitted && !user.lastName &&
-                        <div className="invalid-feedback">Last Name is required</div>
-                    }
-                </div>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" value={user.username} onChange={handleChange} className={'form-control' + (submitted && !user.username ? ' is-invalid' : '')} />
-                    {submitted && !user.username &&
-                        <div className="invalid-feedback">Username is required</div>
-                    }
-                </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" value={user.password} onChange={handleChange} className={'form-control' + (submitted && !user.password ? ' is-invalid' : '')} />
-                    {submitted && !user.password &&
-                        <div className="invalid-feedback">Password is required</div>
-                    }
-                </div>
-                <div className="form-group">
-                    <button className="btn btn-primary">
-                        {registering && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                        Register
-                    </button>
-                    <Link to="/" className="btn btn-link">Cancel</Link>
-                </div>
-            </form>
+              </form>
+            </div>
+          </div>
         </div>
-    );
+      </section>
+      {/* 
+      <div className="col-lg-8 offset-lg-2">
+        <h2>Register</h2>
+        <form name="form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              value={user.firstName}
+              onChange={handleChange}
+              className={
+                "form-control" +
+                (submitted && !user.firstName ? " is-invalid" : "")
+              }
+            />
+            {submitted && !user.firstName && (
+              <div className="invalid-feedback">First Name is required</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              value={user.lastName}
+              onChange={handleChange}
+              className={
+                "form-control" +
+                (submitted && !user.lastName ? " is-invalid" : "")
+              }
+            />
+            {submitted && !user.lastName && (
+              <div className="invalid-feedback">Last Name is required</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              value={user.username}
+              onChange={handleChange}
+              className={
+                "form-control" +
+                (submitted && !user.username ? " is-invalid" : "")
+              }
+            />
+            {submitted && !user.username && (
+              <div className="invalid-feedback">Username is required</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={user.password}
+              onChange={handleChange}
+              className={
+                "form-control" +
+                (submitted && !user.password ? " is-invalid" : "")
+              }
+            />
+            {submitted && !user.password && (
+              <div className="invalid-feedback">Password is required</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <button className="btn btn-primary">
+              {registering && (
+                <span className="spinner-border spinner-border-sm mr-1"></span>
+              )}
+              Register
+            </button>
+            <Link to="/" className="btn btn-link">
+              Cancel
+            </Link>
+          </div>
+        </form>
+      </div> */}
+    </>
+  );
 }
 
 export default RegisterPage;

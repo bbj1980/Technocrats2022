@@ -9,16 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import "../../../assets/css/custom.css";
-import { adminQuizActions } from '../../../redux/_actions/admin.quiz.actions';
 import { render } from "react-dom";
 import { AgGridReact } from "ag-grid-react"; // the AG Grid React Component
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 import { userActions } from "../../../redux/_actions/user.actions";
-// import { CelsiorGrid } from 'celsior-grid';
-// import 'celsior-grid/styles/celsior-grid.css';
-// import 'celsior-grid/styles/celsior-theme-default.css';
 
 // **************************
 // import * as React from "react";
@@ -34,7 +30,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { RamenDining } from "@mui/icons-material";
 
 const names = ["Java", ".Net", "ReactJs"];
 
@@ -57,19 +52,7 @@ const AdminQuiz = () => {
   //
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
-  const [submitted, setSubmitted] = useState(false);
-  const [quizName, setQuizName] = React.useState('');
-  const dispatch = useDispatch();
-  function handleSubmit(e) {
-    e.preventDefault();
 
-    setSubmitted(true);
-    if (personName && quizName) {
-      // get return url from location state or default to home page
-      //const { from } = location.state || { from: { pathname: "/" } };
-      dispatch(adminQuizActions.createQuiz({quizname:quizName,subjectid: 1,quizstatus:'inprogress',quiztime:30,istimerenabled:1,quizcode:22222}));
-    }
-  }
   const handleChange = (event) => {
     const {
       target: { value },
@@ -88,77 +71,71 @@ const AdminQuiz = () => {
         <div className="cel-card">
           <div className="cel-card-header">Create Quiz</div>
           <div className="cel-card-body">
-            <form name="form" onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-sm-12 col-md-6 col-lg-6">
-                  <FormControl className="frm-control">
-                    <Autocomplete
-                      disablePortal
-                      id="combo-box-demo"
-                      onInputChange={(event, newInputValue) => {
-                        setQuizName(newInputValue);
-                      }}
-                      options={category}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Name of Quiz" />
-                      )}
-                    />
-                  </FormControl>
-                </div>
-                <div className="col-sm-12 col-md-6 col-lg-6">
-                  <FormControl className="frm-control">
-                    <InputLabel id="demo-multiple-chip-label">
-                      Choose Relevent Subjects
-                    </InputLabel>
-                    <Select
-                      labelId="demo-multiple-chip-label"
-                      id="demo-multiple-chip"
-                      multiple
-                      value={personName}
-                      onChange={handleChange}
-                      input={
-                        <OutlinedInput
-                          id="select-multiple-chip"
-                          label="Choose Relevent Subjects"
-                        />
-                      }
-                      renderValue={(selected) => (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2.9 }}>
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
+            <div className="row">
+              <div className="col-sm-12 col-md-6 col-lg-6">
+                <FormControl className="frm-control">
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={category}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Name of Quiz" />
+                    )}
+                  />
+                </FormControl>
+              </div>
+              <div className="col-sm-12 col-md-6 col-lg-6">
+                <FormControl className="frm-control">
+                  <InputLabel id="demo-multiple-chip-label">
+                    Choose Relevent Subjects
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-chip-label"
+                    id="demo-multiple-chip"
+                    multiple
+                    value={personName}
+                    onChange={handleChange}
+                    input={
+                      <OutlinedInput
+                        id="select-multiple-chip"
+                        label="Choose Relevent Subjects"
+                      />
+                    }
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2.9 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
                     // MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, personName, theme)}
-                        >
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-                {/* Next */}
-                <div className="col-sm-12 col-md-12 col-lg-12">
-                  <div className="mx-auto cel-pt-20">
-                    <Stack spacing={2} direction="row">
-                      <Link to="/managequestion" className="nav-link">
-                        <Button variant="outlined">Cancel</Button>
-                      </Link>
-                      <div>
-                        <button variant="contained">Next</button>
-                        </div>
-                    </Stack>
-                  </div>
+                  >
+                    {names.map((name) => (
+                      <MenuItem
+                        key={name}
+                        value={name}
+                        style={getStyles(name, personName, theme)}
+                      >
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              {/* Next */}
+              <div className="col-sm-12 col-md-12 col-lg-12">
+                <div className="mx-auto cel-pt-20">
+                  <Stack spacing={2} direction="row">
+                    <Link to="/managequestion" className="nav-link">
+                      <Button variant="outlined">Cancel</Button>
+                    </Link>
+                    <Link to="/managequestion" className="nav-link">
+                      <Button variant="contained">Next</Button>
+                    </Link>
+                  </Stack>
                 </div>
               </div>
-            </form>
-
+            </div>
           </div>
         </div>
         <div></div>

@@ -13,7 +13,7 @@ import { AgGridReact } from "ag-grid-react"; // the AG Grid React Component
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import { adminQuizquestionActions } from "../../../redux/_actions/quiz.qustion.actions";
+import { userActions } from "../../../redux/_actions/user.actions";
 // import { CelsiorGrid } from 'celsior-grid';
 // import 'celsior-grid/styles/celsior-grid.css';
 // import 'celsior-grid/styles/celsior-theme-default.css';
@@ -93,17 +93,10 @@ const StyledMenu = styled((props) => (
 
 const ManageQuestion = () => {
   //
-  const dispatch = useDispatch();
-  
   const [QuestionType, setQuestionType] = React.useState("");
   const [QuestionPoint, setQuestionPoint] = React.useState("");
   const [Timer, setTimer] = React.useState("");
-// reset login status
-useEffect(() => {
-  dispatch(adminQuizquestionActions.getQuizquestion());
- /// alert(quizCategory.toString());
-},[]);
-const quizQuestion = useSelector(state => state.quizQuestion);
+
   const handleChange = (event) => {
     setQuestionType(event.target.value);
   };
@@ -128,7 +121,6 @@ const quizQuestion = useSelector(state => state.quizQuestion);
       <div className="container">
         <div className="cel-card">
           <div className="cel-card-header">
-            {JSON.stringify(quizQuestion)}
             Manage Question
             <div className="div-right">
               <Button

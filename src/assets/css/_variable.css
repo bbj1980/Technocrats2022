@@ -8,7 +8,7 @@
     --cel-font-base: 1rem;
     --cel-body-color: #F5F5F5;
     --cel-text-base: #272829;
-    --cel-primary-header-bgcolor: #064AB9;
+    --cel-primary-header-bgcolor: #19243e;
     --cel-white-color: #ffffff;
     --cel-login-bg:#19243e;
     --cel-e-color-cyan:#5699a6;
@@ -192,6 +192,8 @@
     --cel-space-negative-28: -28px;
     --cel-space-negative-30: -30px;
     --cel-space-negative-50: -50px;
+    --cel-space-negative-35: -35px;
+    --cel-space-0: 0px;
     --cel-space-50: 2px;
     --cel-space-100: 4px;
     --cel-space-200: 8px;

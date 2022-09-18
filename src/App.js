@@ -10,7 +10,7 @@ function App() {
   const CustomDialog = React.lazy(() => import("./customDialog/customDialog"));
   const [showModal, setShowModal] = useState(false);
   const hideEvent = () => {
-    setShowModal(false);  
+    setShowModal(false);
   };
   return (
     <div className="App">

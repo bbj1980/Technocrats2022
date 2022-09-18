@@ -63,7 +63,15 @@ const Layout = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {[
+          "Dashboard",
+          "Admin Quiz",
+          "Manage Question",
+          "Start Quiz",
+          "Join Quiz",
+          "Question Preview",
+          "Live Quiz",
+        ].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -312,11 +320,11 @@ const Layout = () => {
       {localStorage.getItem("user") && userinfo && (
         <Navbar
           className="cel-head"
-          bg={userinfo.role === RoleConstants.ADMIN ? "light" : "light"}
+          bg={userinfo.role === RoleConstants.ADMIN ? "light" : "primary"}
           variant="light"
           expand="lg"
         >
-          <Container>
+          <Container className="container1">
             <Navbar.Brand href="/dashboard">QuizCore</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -324,28 +332,27 @@ const Layout = () => {
                 <Link to="/dashboard" className="nav-link">
                   Dashboard
                 </Link>
-                {userinfo.role === RoleConstants.ADMIN &&<Link to="/createquiz" className="nav-link">
-                  Create Quiz
+                <Link to="/createquiz" className="nav-link">
+                  Admin Quiz
                 </Link>
-      }
-                {userinfo.role === RoleConstants.ADMIN &&
                 <Link to="/managequestion" className="nav-link">
                   Manage Question
                 </Link>
-}
-{userinfo.role === RoleConstants.ADMIN &&<Link to="/startquiz" className="nav-link">
+                <Link to="/startquiz" className="nav-link">
                   Start Quiz
                 </Link>
-}
-                {userinfo.role === RoleConstants.USER &&
                 <Link to="/joinquiz" className="nav-link">
                   Join Quiz
                 </Link>
-}
-               
-{userinfo.role === RoleConstants.ADMIN && <Link to="/questionpreview" className="nav-link">
-                  Quiz Preview
-                </Link>}
+                <Link to="/questionpreview" className="nav-link">
+                  Question Preview
+                </Link>
+                <Link to="/livequiz" className="nav-link">
+                  Live Quiz
+                </Link>
+                <Link to="/adminlivequiz" className="nav-link">
+                  Admin Live Quiz
+                </Link>
                 <Link to="/updateprofile" className="nav-link">
                   Update Profile
                 </Link>
