@@ -1,0 +1,113 @@
+import React from 'react';
+import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
+import { AddCircleRounded, SubjectOutlined } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { useNavigate } from "react-router-dom";
+import GroupIcon from '@mui/icons-material/Group';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import { useSelector } from "react-redux";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+let menuItems = [{
+  text: 'Login',
+  icon: <SubjectOutlined color='secondary' />,
+  path: '/',
+  isAutohrization: false
+},
+{
+  text: 'Dashboard',
+  icon: <DashboardIcon color='secondary' />,
+  path: '/DashBoard',
+  isAutohrization: true
+},
+{
+  text: 'Registration',
+  icon: <AddCircleRounded color='secondary' />,
+  path: '/Registration',
+  isAutohrization: false
+},
+{
+  text: 'User List',
+  icon: <GroupIcon color='secondary' />,
+  path: '/UserList',
+  isAutohrization: true
+},
+
+{
+  text: 'Contact Us',
+  icon: <ContactPageIcon color='secondary' />,
+  path: '/Contact',
+  isAutohrization: false
+}
+
+];
+
+const drawerWidth = 240;
+const useStyles = makeStyles(({
+
+  drawer: {
+    width: drawerWidth
+  },
+  drawerPaper: {
+    width: drawerWidth
+  },
+  root: {
+    display: 'flex'
+  },
+
+  active: {
+    background: '#f5f5f5'
+  }
+}));
+const Layout = () => {
+  const classes = useStyles();
+  let navigate = useNavigate();
+  let filterMenu;
+  const userState = useSelector(state => state);
+  const userStatetemp = true;
+  if (userStatetemp) {
+    filterMenu = menuItems.filter(item => item.isAutohrization === false);
+  } else { filterMenu = menuItems }
+  return (
+    <>
+      <Drawer className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={true}
+        classes={{ paper: classes.drawerPaper }}
+      >
+        <div className={classes.page}>
+          <Typography variant="h6">
+            Skill UP
+          </Typography>
+        </div>
+        {/* List ,Icons*/}
+        <List>
+          {
+
+            filterMenu.map((item) =>
+            (
+              <ListItem
+                key={item.text}
+                item={item} onClick={() => {
+                  navigate(item.path);
+                }}
+
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText>{item.text}</ListItemText>
+              </ListItem>
+            ))
+          }
+
+        </List>
+      </Drawer>
+
+    </>
+  );
+}
+export default Layout;

@@ -16,7 +16,9 @@ body {
     line-height: 1.6;
     min-height: 100vh;
 }
-
+a{
+    color:var(--cel-e-color-cyan)!important;
+}
 
 /* Padding & Margin 4px */
 
@@ -708,11 +710,19 @@ body {
     text-align: right;
 }
 
-/* .cel-head{
-    background-color: var(--cel-seaFoam)!important;
-} */
+.cel-head{
+    background-color: none!important;
+}
 .MuiAppBar-colorPrimary{
-    background-color: var(--cel-seaFoam) !important;
+    /* background-color: var(--cel-seaFoam) !important; */
+    background-color: var(--cel-c-blue) !important;
+        color: var(--cel-white-color);
+}
+.navbar-light .navbar-brand, .navbar-light .navbar-nav .nav-link{
+    color: var(--cel-seaFoam)!important;
+}
+.MuiListItem-padding{
+    margin-top: -20px!important;
 }
 
 .cel-card{
@@ -722,10 +732,11 @@ body {
     border-radius: var(--cel-border-radius-200);
 }
 .cel-card-header{
-    background-color: var(--cel-c-blue);
+    background-color: var(--cel-seaFoam);
     font-size: var(--cel-font-size-500);
     padding: var(--cel-space-200) var(--cel-space-400);
     color: var(--cel-white-color);
+    margin-top: var(--cel-space-500);
     border-radius: var(--cel-border-radius-200) var(--cel-border-radius-200) var(--cel-border-radius-0) var(--cel-border-radius-0);
 }
 .cel-card-body{
@@ -759,7 +770,7 @@ padding: var(--cel-space-400);
     color: var(--cel-white-color);
 }
 .pre-ans3 {
-    background-color: var(--cel-e-color-orange)!important;
+    background-color: var(--cel-e-color-cyan)!important;
     color: var(--cel-white-color);
 }
 .pre-ans4 {
@@ -768,6 +779,16 @@ padding: var(--cel-space-400);
 }
 .label-border{
     border-top:1px solid var(--cel-color-gray-500);
+}
+.right-menu{
+    position: absolute;
+    right: 10px;
+}
+.block{
+flex-direction: column;
+    flex-wrap: wrap;
+        margin-top: 50px;
+            position: absolute;
 }
 .action-button{
     text-align: right;

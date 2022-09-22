@@ -1,40 +1,82 @@
-import { userConstants } from '../../constants/user.constants';
+import { userConstants, STATUS_MESSAGE } from '../../constants/user.constants';
 import { userService } from '../../_services/user.service';
 import { alertActions } from './alert.actions';
 import { history } from '../../_helpers/history';
-import { useHistory } from 'react-router-dom';
+import {
+    LOGIN_SUCCESS,
+    LOGIN_FAIL,
+    LOGOUT,
+    SET_MESSAGE,
+} from "./type.action";
 export const userActions = {
-    login,
+
     logout,
-    update:updateProfile,
+    update: updateProfile,
     register,
     getAll,
     delete: _delete
 };
-function login(username, password) {
-    
-    return dispatch => {
-        dispatch(request({ username }));
+// function login(username, password) {
 
-        userService.login(username, password)
-            .then(
-                user => { 
-                    dispatch(success(user));
-debugger;
-                    window.location.href='/dashboard';
-                },
-                error => {
-                    dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
-                }
-            );
-    };
+//     return dispatch => {
+//         dispatch(request({ username }));
+//         userService.login(username, password)
+//             .then(
+//                 user => {
+//                     dispatch(success(user));
+//                     return Promise.resolve(user);
+//                 },
+//                 error => {
+//                     dispatch(failure(error.toString()));
+//                     dispatch(alertActions.error(error.toString()));
+//                     return Promise.reject(error);
+//                 }
+//             );
+//     };
 
-    function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
-    function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
-}
-
+//     function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
+//     function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
+//     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
+// }
+function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
+export const login = (email, password) => (dispatch) => {
+    return userService.login(email, password).then(
+        (data) => {
+            if (data.statusCode !== STATUS_MESSAGE.SUCCESS) {
+                dispatch({
+                    type: LOGIN_FAIL,
+                });
+                dispatch({
+                    type: SET_MESSAGE,
+                    payload: data.statusMessage,
+                });
+                return Promise.resolve(data);
+            }
+            dispatch(success(data));
+            // dispatch({
+            //     type: LOGIN_SUCCESS,
+            //     payload: { user: data },
+            // });
+            return Promise.resolve(data);
+        },
+        (error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            dispatch({
+                type: LOGIN_FAIL,
+            });
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+            return Promise.reject(error);
+        }
+    );
+};
 function logout() {
     userService.logout();
     return { type: userConstants.LOGOUT };
@@ -46,9 +88,9 @@ function register(user) {
 
         userService.register(user)
             .then(
-                user => { 
+                user => {
                     dispatch(success());
-                    window.location.href='/';
+                    window.location.href = '/';
                     dispatch(alertActions.success('Registration successful'));
                 },
                 error => {
@@ -70,7 +112,7 @@ function updateProfile(user) {
 
         userService.update(user)
             .then(
-                user => { 
+                user => {
                     dispatch(success());
                     dispatch(alertActions.success('Profile update successful'));
                 },

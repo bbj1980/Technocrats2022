@@ -15,5 +15,15 @@ export const userConstants = {
 
     DELETE_REQUEST: 'USERS_DELETE_REQUEST',
     DELETE_SUCCESS: 'USERS_DELETE_SUCCESS',
-    DELETE_FAILURE: 'USERS_DELETE_FAILURE'    
+    DELETE_FAILURE: 'USERS_DELETE_FAILURE'
 };
+export const STATUS_MESSAGE = {
+    SUCCESS: 10000,
+    UserNotFound: -10002,
+    RegistrationIncomplete: -10003,
+    InvalidCredentials: -10004,
+    UserMultipleEmail: -10023,
+    NoData: -22001,
+    NoAutorizationNumberFound: -22005,
+    UnAuthorized: -11000
+}

@@ -22,6 +22,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -54,49 +55,6 @@ const Layout = () => {
 
     setState({ ...state, [anchor]: open });
   };
-
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {[
-          "Dashboard",
-          "Admin Quiz",
-          "Manage Question",
-          "Start Quiz",
-          "Join Quiz",
-          "Question Preview",
-          "Live Quiz",
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
 
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -177,200 +135,141 @@ const Layout = () => {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
+    ></Menu>
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+    <Menu open={isMobileMenuOpen} onClose={handleMobileMenuClose}></Menu>
   );
 
   const user = useSelector((state) => state.authentication.user);
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-              {["Menu"].map((anchor) => (
-                <React.Fragment key={anchor}>
-                  <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-                  <Drawer
-                    anchor={anchor}
-                    open={state[anchor]}
-                    onClose={toggleDrawer(anchor, false)}
+      {
+        user ? (
+          <>
+            <Box sx={{ flexGrow: 1 }}>
+              <AppBar position="static">
+                <Toolbar>
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    sx={{ mr: 2 }}
                   >
-                    {list(anchor)}
-                  </Drawer>
-                </React.Fragment>
-              ))}
-            </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
-              QuizCore
-            </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
-                <Badge badgeContent={5} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+                    {/* <MenuIcon /> */}
+                  </IconButton>
+
+                  {localStorage.getItem("user") && userinfo && (
+                    <Navbar
+                      className="cel-head"
+                      // bg={userinfo.role === RoleConstants.ADMIN ? "light" : "light"}
+                      variant="light"
+                      expand="lg"
+                    >
+                      <Container>
+                        <Navbar.Brand href="/dashboard">
+                          Technovation 2022
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                          <Nav className="me-auto">
+                            <Link to="/dashboard" className="nav-link">
+                              Dashboard
+                            </Link>
+                            {userinfo.role === RoleConstants.ADMIN && (
+                              <Link to="/createquiz" className="nav-link">
+                                Create Quiz
+                              </Link>
+                            )}
+                            {userinfo.role === RoleConstants.ADMIN && (
+                              <Link to="/managequestion" className="nav-link">
+                                Add Question
+                              </Link>
+                            )}
+                            {userinfo.role === RoleConstants.ADMIN && (
+                              <Link to="/questionlist" className="nav-link">
+                                Question List(s)
+                              </Link>
+                            )}
+                            {userinfo.role === RoleConstants.ADMIN && (
+                              <Link to="/startquiz" className="nav-link">
+                                Start Quiz
+                              </Link>
+                            )}
+                            {userinfo.role === RoleConstants.USER && (
+                              <Link to="/joinquiz" className="nav-link">
+                                Join Quiz
+                              </Link>
+                            )}
+                            {userinfo.role === RoleConstants.USER && (
+                              <Link to="/demoquiz" className="nav-link">
+                                Self Assesment
+                              </Link>
+                            )}
+
+                            {userinfo.role === RoleConstants.ADMIN && (
+                              <Link to="/questionpreview" className="nav-link">
+                                Quiz Preview
+                              </Link>
+                            )}
+                            <Link to="/updateprofile" className="nav-link">
+                              Update Profile
+                            </Link>
+                          </Nav>
+                        </Navbar.Collapse>
+                      </Container>
+                    </Navbar>
+                  )}
+
+                  {/*  */}
+                  <Box sx={{ flexGrow: 1 }} />
+                  <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                    <div className="text-light cel-mt-24">
+                      {/* Hi {user.firstName} {user.lastName} */}
+                    </div>
+                    <IconButton
+                      size="large"
+                      edge="end"
+                      aria-label="account of current user"
+                      aria-controls={menuId}
+                      aria-haspopup="true"
+                      onClick={handleProfileMenuOpen}
+                      color="inherit"
+                    >
+                      <Nav.Link href="/logout">
+                        {" "}
+                        <LogoutIcon />
+                      </Nav.Link>
+                    </IconButton>
+                  </Box>
+                  <Box sx={{ display: { xs: "flex", md: "none" } }}>
+                    <IconButton
+                      size="large"
+                      aria-label="show more"
+                      aria-controls={mobileMenuId}
+                      aria-haspopup="true"
+                      onClick={handleMobileMenuOpen}
+                      color="inherit"
+                    >
+                      <MoreIcon />
+                    </IconButton>
+                  </Box>
+                </Toolbar>
+              </AppBar>
+              {renderMobileMenu}
+              {renderMenu}
             </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
-      </Box>
-
-      {/* Drawer */}
-      {/* {["left"].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <Drawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))} */}
-
-      {localStorage.getItem("user") && userinfo && (
-        <Navbar
-          className="cel-head"
-          bg={userinfo.role === RoleConstants.ADMIN ? "light" : "primary"}
-          variant="light"
-          expand="lg"
-        >
-          <Container className="container1">
-            <Navbar.Brand href="/dashboard">QuizCore</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <Link to="/dashboard" className="nav-link">
-                  Dashboard
-                </Link>
-                <Link to="/createquiz" className="nav-link">
-                  Admin Quiz
-                </Link>
-                <Link to="/managequestion" className="nav-link">
-                  Manage Question
-                </Link>
-                <Link to="/startquiz" className="nav-link">
-                  Start Quiz
-                </Link>
-                <Link to="/joinquiz" className="nav-link">
-                  Join Quiz
-                </Link>
-                <Link to="/questionpreview" className="nav-link">
-                  Question Preview
-                </Link>
-                <Link to="/livequiz" className="nav-link">
-                  Live Quiz
-                </Link>
-                <Link to="/adminlivequiz" className="nav-link">
-                  Admin Live Quiz
-                </Link>
-                <Link to="/updateprofile" className="nav-link">
-                  Update Profile
-                </Link>
-
-                <Nav.Link href="/logout">Log out</Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-            <div className="text-light">
-              Hi {user.firstName} {user.lastName}
-            </div>
-          </Container>
-        </Navbar>
-      )}
+          </>
+        ) : null}
       <Container>
         <Col>
           <Outlet />
         </Col>
       </Container>
+
       <div className="footer">© 2022 Celsior Technologies™</div>
     </>
   );

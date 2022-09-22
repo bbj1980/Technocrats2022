@@ -45,6 +45,7 @@ import FormLabel from "@mui/material/FormLabel";
 // import Radio from "@mui/material/Radio";
 // import RadioGroup from "@mui/material/RadioGroup";
 // import FormControlLabel from "@mui/material/FormControlLabel";
+import CustomQuestion from './customquestion';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -115,7 +116,26 @@ const ManageQuestion = () => {
     setAnchorEl(null);
   };
   //
+  const [values, setValues] = useState({ val: [] });
 
+  const addClick = () => {
+    setValues({ val: [...values.val, ''] })
+  }
+
+  const removeClick = (event) => {
+    let vals = [...values.val];
+    let index = Number(event.target.name);
+    vals.splice(index, 1);
+    setValues({ val: vals });
+  }
+  function createInputs() {
+    return values.val.map((el, i) =>
+      <div key={i}>
+        <CustomQuestion name={i} onChange={handleChange.bind(i)}></CustomQuestion>
+
+      </div>
+    );
+  }
   return (
     <>
       <div className="container">
@@ -235,180 +255,17 @@ const ManageQuestion = () => {
               </div>
               {/*  */}
 
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormGroup>
-                      <FormControlLabel
-                        label="Right Answer"
-                        control={<Checkbox />}
-                      />
-                    </FormGroup>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button ">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormGroup>
-                      <FormControlLabel
-                        label="Right Answer"
-                        control={<Checkbox />}
-                      />
-                    </FormGroup>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormGroup>
-                      <FormControlLabel
-                        className="check-radio"
-                        label="Right Answer"
-                        control={<Checkbox defaultChecked />}
-                      />
-                    </FormGroup>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormGroup className="check-radio">
-                      <FormControlLabel
-                        label="Right Answer"
-                        control={<Checkbox defaultChecked />}
-                      />
-                    </FormGroup>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              {/*  */}
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormControl>
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                      >
-                        <FormControlLabel
-                          value="Correct"
-                          control={<Radio />}
-                          label="Correct"
-                          name="radio1"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button ">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormControl>
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                      >
-                        <FormControlLabel
-                          value="Correct"
-                          control={<Radio />}
-                          label="Correct"
-                          name="radio1"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormControlLabel
-                      value="Correct"
-                      control={<Radio />}
-                      label="Correct"
-                      name="radio1"
-                    />
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
-              <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3 cel-pt-20">
-                <div
-                  contentEditable="true"
-                  className="content-editable action-link"
-                >
-                  <div className="action-button">
-                    <div className="delete-icon">
-                      <DeleteIcon />
-                    </div>
-                    <FormControlLabel
-                      value="Correct"
-                      control={<Radio />}
-                      label="Correct"
-                      name="radio1"
-                    />
-                  </div>
-                  Type an answer option here
-                </div>
-              </div>
+
             </div>
+            <stack spacing={2} direction="row">
+              <CustomQuestion></CustomQuestion>
+              {createInputs()}
+
+            </stack>
+
             <div className="col-sm-12 col-md-12 col-lg-12">
               <div className="circle-dev">
-                <AddIcon large />
+                <AddIcon large onClick={addClick} />
               </div>
               <div className="mx-auto cel-pt-20">
                 <Stack spacing={2} direction="row">
@@ -419,7 +276,7 @@ const ManageQuestion = () => {
             </div>
           </div>
         </div>
-        <div></div>
+
       </div>
     </>
   );

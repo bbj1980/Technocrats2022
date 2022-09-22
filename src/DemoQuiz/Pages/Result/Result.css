@@ -1,0 +1,12 @@
+.result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+}
+.banner {
+  width: 55%;
+  align-self: center;
+  padding: 8px;
+}

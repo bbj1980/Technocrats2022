@@ -1,6 +1,7 @@
 import config from '../config';
 import { authHeader } from '../_helpers/auth-header';
 import handleResponse from '../_helpers/handle.response';
+import axios from "axios";
 
 export const userService = {
     login,
@@ -12,23 +13,33 @@ export const userService = {
     delete: _delete
 };
 
-function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    };
+// function login(username, password) {
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ username, password })
+//     };
 
-    return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
-        .then(handleResponse)
-        .then(user => { 
-            // store user   details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('user', JSON.stringify(user));
+//     return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+//         .then(handleResponse)
+//         .then(user => { 
+//             // store user   details and jwt token in local storage to keep user logged in between page refreshes
+//             localStorage.setItem('user', JSON.stringify(user));
 
-            return user;
+//             return user;
+//         });
+// }
+
+function login(email, password) {
+    return axios
+        .post(`${config.apiUrl}/Auth`, {
+            email,
+            password,
+        })
+        .then((response) => {
+            return response.data;
         });
 }
-
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
@@ -52,23 +63,27 @@ function getById(id) {
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 }
 
-function register(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
+// function register(user) {
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(user)
+//     };
 
-    return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
-}
-
+//     return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
+// }
+function register(userData) {
+    return axios.post(`${config.apiUrl}/user`, {
+        userData
+    });
+};
 function update(user) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
-debugger;
+    debugger;
     return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
 }
 

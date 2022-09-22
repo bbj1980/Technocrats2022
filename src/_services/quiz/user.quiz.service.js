@@ -1,23 +1,20 @@
-import config from '../../config';
-import { authHeader } from '../../_helpers/auth-header';
 import handleResponse from '../../_helpers/handle.response';
 import { UrlConstants } from '../../constants/url.constants';
-
-export const userQuizService = {
-    getQuiz,
-
+import Api from '../../_helpers/api';
+export const UserQuizService = {
+    QuizeByCode,
+    QuizeByUser
 };
-
-function getQuiz(code) {
-    const requestOptions = {
-        method: 'POST',
-        headers: authHeader(),
-        body: JSON.stringify({ code }),
-    };
-
-    return fetch(`${config.apiUrl}${UrlConstants.USER.GET_QUIZ}`, requestOptions)
-        .then(handleResponse)
-        .then(response => {
-            return response;
-        });
+async function QuizeByCode(quiz) {
+    const res = await Api.post(`${UrlConstants.QUIZ.GET_QUIZ_BYCODE}`,
+        quiz
+    );
+    return res;
 }
+async function QuizeByUser(quiz) {
+    const res = await Api.post(`${UrlConstants.QUIZ.GET_QUIZ_BYUSER}`,
+        quiz
+    );
+    return res;
+}
+

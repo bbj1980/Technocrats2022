@@ -5,18 +5,18 @@ export const adminQuizActions = {
     createQuiz
 };
 function createQuiz(quiz) {
-    
     return dispatch => {
-        dispatch(request({ quiz }));
-
-        adminQuizService.login(quiz)
+        //        dispatch(request({ quiz }));
+        return adminQuizService.createQuiz(quiz)
             .then(
-                quiz => { 
+                quiz => {
                     dispatch(success(quiz));
+                    return Promise.resolve();
                 },
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    return Promise.reject();
                 }
             );
     };

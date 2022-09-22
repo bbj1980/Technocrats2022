@@ -13,6 +13,11 @@ import store from "./redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ErrorBoundary } from "react-error-boundary";
+import axios from "axios";
+import { useState } from "react";
+import Home from "../src/DemoQuiz/Pages/Home/Home";
+import Quiz from "../src/DemoQuiz/Pages/Quiz/Quiz";
+import Result from "../src/DemoQuiz/Pages/Result/Result";
 
 const ErrorHandler = React.lazy(() => import("./components/error"));
 const App = React.lazy(() => import("./App"));
@@ -26,6 +31,9 @@ const LogOut = React.lazy(() => import("./components/logout"));
 const UpdateProfile = React.lazy(() => import("./components/updateProfile"));
 const AdminQuiz = React.lazy(() =>
   import("./components/dashboard/quiz/admin.quiz")
+);
+const QuestionList = React.lazy(() =>
+  import("./components/dashboard/quiz/questionlist")
 );
 const ManageQuestion = React.lazy(() =>
   import("./components/dashboard/quiz/managequestion")
@@ -46,7 +54,25 @@ const AdminLiveQuiz = React.lazy(() =>
   import("./components/dashboard/quiz/adminlivequiz")
 );
 
+const UserDashBoard = React.lazy(() => import("./components/dashboard/user.dashboard"));
+const AdminDashboard = React.lazy(() => import("./components/dashboard/admin.dashboard"));
+
 export default function Index() {
+
+  const [questions, setQuestions] = useState();
+  const [name, setName] = useState();
+  const [score, setScore] = useState(0);
+
+  const fetchQuestions = async (category = "", difficulty = "") => {
+    const { data } = await axios.get(
+      `https://opentdb.com/api.php?amount=10${category && `&category=${category}`
+      }${difficulty && `&difficulty=${difficulty}`}&type=multiple`
+    );
+
+    setQuestions(data.results);
+  };
+
+
   const alert = useSelector((state) => state.alert);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -75,7 +101,7 @@ export default function Index() {
                 }
               />
 
-              <Route
+              {/* <Route
                 path="dashboard"
                 element={
                   <PrivateRoute
@@ -84,7 +110,11 @@ export default function Index() {
                     <Dashboard />{" "}
                   </PrivateRoute>
                 }
-              />
+              /> */}
+              <Route path="/DashBoard" element={<Dashboard />}></Route>
+              <Route path="/AdminDashboard" element={<AdminDashboard />}></Route>
+              <Route path="/UserDashBoard" element={<UserDashBoard />}></Route>
+
               <Route
                 path="createquiz"
                 element={
@@ -102,6 +132,16 @@ export default function Index() {
                     allowedrole={[RoleConstants.USER, RoleConstants.ADMIN]}
                   >
                     <ManageQuestion />{" "}
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="questionlist"
+                element={
+                  <PrivateRoute
+                    allowedrole={[RoleConstants.USER, RoleConstants.ADMIN]}
+                  >
+                    <QuestionList />{" "}
                   </PrivateRoute>
                 }
               />
@@ -179,6 +219,26 @@ export default function Index() {
               />
               <Route path="*" element={<NoPage />} />
             </Route>
+
+            <Route path="/demoquiz"
+              element={<Home
+                name={name}
+                setName={setName}
+                fetchQuestions={fetchQuestions}
+              />} />
+
+            <Route path="/quiz"
+              element={<Quiz
+                name={name}
+                questions={questions}
+                score={score}
+                setScore={setScore}
+                setQuestions={setQuestions}
+              />}
+            />
+            <Route path="/result"
+              element={<Result name={name} score={score} />}
+            />
           </Routes>
         </BrowserRouter>
       </React.Suspense>

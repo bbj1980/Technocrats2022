@@ -1,9 +1,9 @@
-import React, {   useState, useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { render } from 'react-dom';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
-
+import QuizOverview from "../admindashboard/BlogOverview"
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import { userActions } from '../../redux/_actions/user.actions';
@@ -28,69 +28,71 @@ const getParams = () => {
   };
 };
 const AdminDashboard = () => {
-  const showgrid=true;
+  const showgrid = true;
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
- 
+
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
-    {field: 'firstName', filter: true,editable: true
-  },
-    {field: 'lastName', filter: true,editable: true
-  },
-    {field: 'role',filter:true}
+    {
+      field: 'firstName', filter: true, editable: true
+    },
+    {
+      field: 'lastName', filter: true, editable: true
+    },
+    { field: 'role', filter: true }
   ]);
- 
+
   // DefaultColDef sets props common to all Columns
-  const defaultColDef = useMemo( ()=> ({
-      sortable: true
-    }));
- 
+  const defaultColDef = useMemo(() => ({
+    sortable: true
+  }));
+
   // Example of consuming Grid Event
-  const cellClickedListener = useCallback( event => {
+  const cellClickedListener = useCallback(event => {
     console.log('cellClicked', event);
   }, []);
- 
-   
+
+
   // Example using Grid's API
-  const buttonListener = useCallback( e => {
+  const buttonListener = useCallback(e => {
     gridRef.current.api.deselectAll();
   }, []);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(userActions.getAll());
-}, []);
-const onBtnExport = useCallback(() => {
-  var params = getParams();
-  if (params.columnSeparator) {
-    alert(
-      'NOTE: you are downloading a file with non-standard separators - it may not render correctly in Excel.'
-    );
-  }
-  gridRef.current.api.exportDataAsCsv(params);
-}, [alert]);
+  }, []);
+  const onBtnExport = useCallback(() => {
+    var params = getParams();
+    if (params.columnSeparator) {
+      alert(
+        'NOTE: you are downloading a file with non-standard separators - it may not render correctly in Excel.'
+      );
+    }
+    gridRef.current.api.exportDataAsCsv(params);
+  }, [alert]);
 
-const getParams = () => {
-  return {
-    columnSeparator: getValue('#columnSeparator'),
+  const getParams = () => {
+    return {
+      columnSeparator: getValue('#columnSeparator'),
+    };
   };
-};
-const onBtnUpdate = useCallback(() => {
-  document.querySelector(
-    '#csvResult'
-  ).value = gridRef.current.api.getDataAsCsv(getParams());
-}, []);
-// function handleDeleteUser(id) {
-//   dispatch(userActions.delete(id));
-// }
-// Create table headers consisting of 4 columns.
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
+  const onBtnUpdate = useCallback(() => {
+    document.querySelector(
+      '#csvResult'
+    ).value = gridRef.current.api.getDataAsCsv(getParams());
+  }, []);
+  // function handleDeleteUser(id) {
+  //   dispatch(userActions.delete(id));
+  // }
+  // Create table headers consisting of 4 columns.
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
 
-];
+  ];
 
-  const users= useSelector(state => state.users);
-  const [valid,  setValid] = useState(false);
+  const users = useSelector(state => state.users);
+  const [valid, setValid] = useState(false);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
 
@@ -113,12 +115,9 @@ const columns = [
     }
   ];
 
-    return (<>
-            <h1>Welcome Admin </h1> 
-            
-     
-            
-          <div className="row">
+  return (<>
+    <QuizOverview></QuizOverview>
+    {/* <div className="row">
             <div className="column"><label>columnSeparator = </label></div>
             <div>
             <select id="columnSeparator">
@@ -150,8 +149,8 @@ const columns = [
             onCellClicked={cellClickedListener} // Optional - registering for Grid Event
             />}
 
-               </div>
-          </>);
-  };
-  
-  export default AdminDashboard;
+               </div> */}
+  </>);
+};
+
+export default AdminDashboard;

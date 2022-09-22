@@ -1,13 +1,11 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../redux/_actions/user.actions";
-import { Row, Col } from "react-bootstrap";
-import { browserHistory } from "react-router";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+import { userActions, login } from "../redux/_actions/user.actions";
+import { useNavigate } from "react-router-dom";
+import { userConstants, STATUS_MESSAGE } from '../constants/user.constants';
+import { RoleConstants } from '../constants/role.constants';
+import axios from "axios";
 
 import "../../src/assets/css/login.css";
 function LoginPage() {
@@ -16,6 +14,8 @@ function LoginPage() {
     password: "",
     code: "",
   });
+  let navigate = useNavigate();
+
   const [showModal, setShowModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { username, password, code } = inputs;
@@ -24,6 +24,8 @@ function LoginPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const CustomDialog = React.lazy(() => import("../customDialog/customDialog"));
+  const [questions, setQuestions] = useState();
+
   const hideEvent = () => {
     setShowModal(false);
   };
@@ -39,17 +41,53 @@ function LoginPage() {
     const { name, value } = e.target;
     setInputs((inputs) => ({ ...inputs, [name]: value }));
   }
+  const fetchQuestions = async (category = "", difficulty = "") => {
+    const { data } = await axios.get(
+      `https://opentdb.com/api.php?amount=10${category && `&category=${category}`
+      }${difficulty && `&difficulty=${difficulty}`}&type=multiple`
+    );
 
+    setQuestions(data.results);
+  };
   function handleSubmit(e) {
     e.preventDefault();
-
     setSubmitted(true);
     if (username && password) {
       // get return url from location state or default to home page
       const { from } = location.state || { from: { pathname: "/" } };
-      dispatch(userActions.login(username, password, from));
+
+      dispatch(login(username, password, from))
+        .then((response) => {
+          if (response.statusCode === STATUS_MESSAGE.SUCCESS) {
+            //validatePassword(response.data.password).then(() => {
+            localStorage.setItem('user', JSON.stringify(response.data));
+            if (code) {
+              localStorage.setItem('quizcode', JSON.stringify(code));
+
+
+              //      getQuizByCode(localStorage.getItem('quizcode'));
+              fetchQuestions(17, 'easy').then((response) => {
+                navigate("/quiz", {
+                  name: { username },
+                  questions: { questions }
+
+                });
+              })
+
+
+            }
+            else if (response.data.role === RoleConstants.USER) {
+              navigate("UserDashBoard");
+            } else {
+              navigate("AdminDashboard");
+            }
+            // })
+          }
+        });
     }
   }
+
+
 
   return (
     <>
@@ -119,13 +157,10 @@ function LoginPage() {
                   <label>Code</label>
                   <input
                     type="text"
-                    name="text"
+                    name="code"
                     value={code}
+                    className="form-control"
                     onChange={handleChange}
-                    className={
-                      "form-control" +
-                      (submitted && !password ? " is-invalid" : "")
-                    }
                   />
                 </div>
 
